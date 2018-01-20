@@ -1,0 +1,21 @@
+#!/bin/sh
+# Robot Installation Notes
+# last edited by RayS 1/17/2018
+
+# Python 3.5 is currently the installed version
+# Python Modules
+
+sudo apt-get install pip
+sudo apt-get install python3-pip
+sudo pip3 install flask
+sudo pip3 install pyinstaller
+pyinstaller r2d2.py
+sudo pip3 install GPIO
+sudo pip3 install RPi
+sudo apt-get install python3-rpi.gpio
+
+
+# Clone github repo, creates the r2d2 directory
+git clone https://github.com/rrrd50/r2d2.git
+
+
