@@ -4,19 +4,18 @@ from time import sleep
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)  # set the pin numbering to the Broadcom chip numbers
-GPIO.setup(21, GPIO.OUT)  # set BCM pin 21 (connector pin 40 to an output)
-GPIO.setup(20, GPIO.OUT)  # set BCM pin 20 (connector pin 38 to an output)
-GPIO.setup(16, GPIO.OUT)  # set BCM pin 16 (connector pin 36 to an output)
-GPIO.setup(12, GPIO.OUT)  # set BCM pin 12 (connector pin 32 to an output)
+GPIO.setup(21, GPIO.OUT)  # set BCM pin 21 (connector pin 40 to an output), White
+GPIO.setup(20, GPIO.OUT)  # set BCM pin 20 (connector pin 38 to an output), Blue
+GPIO.setup(16, GPIO.OUT)  # set BCM pin 16 (connector pin 36 to an output), Green
+GPIO.setup(12, GPIO.OUT)  # set BCM pin 12 (connector pin 32 to an output), Brown
 
-
-# Ground is on pin 34
+# Ground is on pin 34, Black
 
 # stepper motor lingo
-# A = 21
-# B = 20
-# AN = 16
-# BM = 12
+# A = pin 21, White
+# B = pin 20, Blue
+# AN = pin 16, Green
+# BM = pin 12, Brown
 
 class Stepper:
     def __init__(self):
