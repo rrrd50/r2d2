@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>R2D2 Control</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <script src="{{ url_for('static', filename='jquery-3.2.1.js') }}"></script>
+
+        <style>
+            .button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .button1 {background-color: #008CBA;} /* Blue */
+            .button2 {background-color: #4CAF50;} /* Green */
+            .button3 {background-color: #f44336;} /* Red */
+            .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+        </style>
+
+
+    </head>
+    <body>
+
+        <h2>Ray's Block Chain</h2>
+        <p>An experiment with block chain architecture.</p>
+
+        <button class="button button1" onclick="window.location.href='/forward'">Forward</button>
+        <button class="button button2" onclick="window.location.href='/reverse'">Reverse</button>
+        <button class="button button3" onclick="window.location.href='/turn_right'">Turn Right</button>
+        <button class="button button4" onclick="window.location.href='/turn_left'">Turn Left</button>
+        <br>
+
+        {% block content %}{% endblock %}
+        <br><br>
+    </body>
+</html>

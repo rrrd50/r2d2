@@ -31,7 +31,26 @@ class Stepper:
     def shift_right(l, n):
         return l[-n:] + l[:-n]
 
-    def turn_motor(self, direction="cw", speed=1, duration=1):  # (cw/ccw, rev/sec, seconds)
+    def turn_motor(self, direction="cw", speed=1.0, angle=1):  # (cw/ccw, rev/sec, seconds)
+        # global states, outputs
+        delay = 0.01 / speed
+        steps = round(angle / 3.6)
+        i = 0
+        while i < steps:
+            for x, output in enumerate(self.outputs):
+                GPIO.output(output, self.states[x])
+            if direction == 'cw':
+                self.states = self.shift_left(self.states, 1)
+            elif direction == 'ccw':
+                self.states = self.shift_right(self.states, 1)
+            i += 1
+            sleep(delay)
+        if direction == "cw":
+            self.head_angle = self.head_angle + steps * 3.6
+        elif direction =="ccw":
+            self.head_angle = self.head_angle - steps * 3.6
+
+    def turn_motor_save(self, direction="cw", speed=1, duration=1):  # (cw/ccw, rev/sec, seconds)
         # global states, outputs
         delay = 0.01 / speed
         steps = duration / delay
@@ -50,11 +69,9 @@ class Stepper:
         elif direction =="ccw":
             self.head_angle = self.head_angle - steps * 3.6
 
-
 if __name__ == '__main__':
     step = Stepper()
-    step.turn_motor(direction="cw", speed=2, duration=2)  # (cw/ccw, rev/sec, seconds)
-    step.turn_motor()  # (cw/ccw, rev/sec, seconds)
-    step.turn_motor(direction="ccw", speed=0.5, duration=2)  # (cw/ccw, rev/sec, seconds)
+    step.turn_motor(direction="cw", speed=0.5, angle=90)  # (cw/ccw, rev/sec, angle)
+    step.turn_motor(direction="ccw", speed=0.5, angle=90)  # (cw/ccw, rev/sec, angle)
 
     GPIO.cleanup()

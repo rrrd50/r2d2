@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>R2D2 Control</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <script src="{{ url_for('static', filename='jquery-3.2.1.js') }}"></script>
+
+        <style>
+            .button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .button_blue {background-color: #008CBA;} /* Blue */
+            .button_green {background-color: #4CAF50;} /* Green */
+            .button_green_m {background-color: #4CAF50;  margin-left: 75px;} /* Green */
+            .button_red {background-color: #f44336;} /* Red */
+            .button_gray {background-color: #777777;} /* Gray */
+        </style>
+
+
+    </head>
+    <body>
+
+        <h2>Drive R2D2</h2>
+
+        <button class="button button_green_m" value="forward" onclick="move(value)">Forward</button><br>
+        <button class="button button_green" value="left" onclick="move(value)">Turn Left</button>
+        <button class="button button_green" value="right" onclick="move(value)">Turn Right</button><br>
+        <button class="button button_green_m" value="reverse" onclick="move(value)">Reverse</button>
+        <br>
+
+        <h2>Turn R2D2 Head</h2>
+
+        <button class="button button_blue" value="head_left" onclick="move(value)">Turn Head Left</button>
+        <button class="button button_blue" value="head_right" onclick="move(value)">Turn Head Right</button><br>
+        <br>
+        <br><br>
+
+        <h2>Coordinates and Direction</h2>
+        <div id="demo"></div>
+        <br>
+        <form id="settings">
+            Motion Speed (int: -64 to 63): <input type="text" name="motion_speed" id="motionSpeed" value=32><br>
+            Motion Duration (float: seconds): <input type="text" name="motion_time" id="motionTime"  value=2><br>
+            Head Speed (float: 0 to 1): <input type="text" name="head_speed" id="headSpeed"  value=0.25><br>
+            Head Turn Degrees (int: 0 to 360): <input type="text" name="head_degrees" id="headDegrees"  value=90><br>
+            <br>
+        </form>
+
+
+        <button class="button button_red" value="stop" onclick="move(value)">Stop</button>
+        <br><br>
+
+
+        <script>
+        function move(value) {
+            // var motionspeed = document.getElementById("uniqueID").value;
+            var request = {};
+            request["direction"] = value;
+            request["motion_speed"] = document.getElementById("motionSpeed").value;
+            request["head_speed"] = document.getElementById("headSpeed").value;
+            request["motion_time"] = document.getElementById("motionTime").value;
+            request["head_degrees"] = document.getElementById("headDegrees").value;
+
+
+            /* Send the request to the server */
+            $.ajax({
+                type: "POST",
+                url: "/move",  // sends data and executes this route
+                data: JSON.stringify(request),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    document.getElementById("demo").innerHTML = "x = " + parseFloat(response["x"]).toFixed(2)
+                        + ": y = " + parseFloat(response["y"]).toFixed(2)
+                        + ": angle =" + parseFloat(response["angle"]).toFixed(2);
+                }
+            });
+
+            if (this.readyState == 4 && this.status == 201) {
+                document.getElementById("demo").innerHTML =
+                this.responseText;
+            }
+        }
+        </script>
+
+    </body>
+</html>
