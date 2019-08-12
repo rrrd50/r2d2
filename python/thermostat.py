@@ -6,7 +6,7 @@ import time
 from r2d2_lib.roboclaw3 import RoboClaw
 from stepper import *
 
-rc = RoboClaw('/dev/ttyACM0', 0x80)
+# rc = RoboClaw('/dev/ttyACM0', 0x80)
 step = Stepper()
 
 
