@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-""" Serves a web page to control the drive motors """
 
 from flask import Flask, jsonify, request, render_template
 from math import sin, cos, pi
@@ -7,7 +6,7 @@ import time
 from r2d2_lib.roboclaw3 import RoboClaw
 from stepper import *
 
-rc = RoboClaw('/dev/ttyACM0', 0x80)
+# rc = RoboClaw('/dev/ttyACM0', 0x80)
 step = Stepper()
 
 
