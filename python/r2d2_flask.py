@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Serves a web page to control the drive motors """
 
 from flask import Flask, jsonify, request, render_template
 from math import sin, cos, pi

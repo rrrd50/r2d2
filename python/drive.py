@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Simple program to test drive motors """
 
 from r2d2_lib.roboclaw3 import RoboClaw
 # from roboclaw import RoboClaw

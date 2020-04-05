@@ -1,3 +1,8 @@
+""" Library to communidate with the roboclaw motor controller. I converted this from
+    python2 to python3.
+"""
+
+
 import logging
 import time
 from threading import Lock

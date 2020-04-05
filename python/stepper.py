@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Program to test the stepper motor to turn the head """
 
 from time import sleep
 import RPi.GPIO as GPIO
