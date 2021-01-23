@@ -72,7 +72,7 @@ class Stepper:
 
 if __name__ == '__main__':
     step = Stepper()
-    step.turn_motor(direction="cw", speed=0.5, angle=180)  # (cw/ccw, rev/sec, angle)
+    step.turn_motor(direction="cw", speed=2.0, angle=720)  # (cw/ccw, rev/sec, angle)
     sleep(0.5)
     step.turn_motor(direction="ccw", speed=0.5, angle=180)  # (cw/ccw, rev/sec, angle)
 

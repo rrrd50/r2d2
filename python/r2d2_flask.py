@@ -4,11 +4,28 @@
 from flask import Flask, jsonify, request, render_template
 from math import sin, cos, pi
 import time
-from r2d2_lib.roboclaw3 import RoboClaw
-from stepper import *
+from roboclaw_python.roboclaw_3 import Roboclaw
+from stepper import Stepper, GPIO
+# from stepper import *
+from signal import signal, SIGINT
+from sys import exit
 
-rc = RoboClaw('/dev/ttyACM0', 0x80)
+#Linux comport name, can be ttyACM1, run $ ls /dev/ttyACM* (to find the correct one)
+rc = Roboclaw("/dev/ttyACM0",115200)
+
+rc.Open()
+address = 0x80
+
 step = Stepper()
+
+# handler to gracefully exit on cntl-c
+def handler(signal_received, frame):
+    # Handle any cleanup here
+    print('SIGINT or CTRL-C detected. Exiting gracefully')
+    print("GPIO", GPIO)
+    GPIO.cleanup()
+    exit(0)
+
 
 
 class R2D2:
@@ -25,8 +42,8 @@ class R2D2:
         self.x_coord += d * sin(a)  # calculate new x coordinate
         self.y_coord += d * cos(a)  # calculate new y coordinate
         # perform movement
-        rc.drive_motor(motor=1, speed=int(self.speed))
-        rc.drive_motor(motor=2, speed=int(self.speed))
+        rc.ForwardM1(address,self.speed)
+        rc.ForwardM2(address,self.speed)
         time.sleep(self.m_time)
         self.stop()  # Turn both motors off
 
@@ -36,8 +53,8 @@ class R2D2:
         self.x_coord -= d * sin(a)
         self.y_coord -= d * cos(a)
         # perform movement
-        rc.drive_motor(motor=1, speed=-int(self.speed))
-        rc.drive_motor(motor=2, speed=-int(self.speed))
+        rc.BackwardM1(address,self.speed)
+        rc.BackwardM2(address,self.speed)
         time.sleep(self.m_time)
         self.stop()  # Turn both motors off
 
@@ -48,8 +65,10 @@ class R2D2:
         elif self.angle >= 360:
             self.angle -= 360
         # perform movement
-        rc.drive_motor(motor=1, speed=int(self.speed))
-        rc.drive_motor(motor=2, speed=-int(self.speed))
+        rc.ForwardM1(address,self.speed)
+        rc.BackwardM2(address,self.speed)
+        #rc.drive_motor(motor=1, speed=int(self.speed))
+        #rc.drive_motor(motor=2, speed=-int(self.speed))
         time.sleep(self.m_time)
         self.stop()  # Turn both motors off
 
@@ -59,16 +78,20 @@ class R2D2:
             self.angle += 360
         elif self.angle >= 360:
             self.angle -= 360  # perform movement
-        rc.drive_motor(motor=1, speed=-int(self.speed))
-        rc.drive_motor(motor=2, speed=int(self.speed))
+        rc.BackwardM1(address,self.speed)
+        rc.ForwardM2(address,self.speed)
+        #rc.drive_motor(motor=1, speed=-int(self.speed))
+        #rc.drive_motor(motor=2, speed=int(self.speed))
         time.sleep(self.m_time)
         self.stop()  # Turn both motors off
 
     @staticmethod
     def stop():
         # Turn both motors off
-        rc.drive_motor(motor=1, speed=0)
-        rc.drive_motor(motor=2, speed=0)
+        rc.ForwardM1(address,0)
+        rc.ForwardM2(address,0)
+        #rc.drive_motor(motor=1, speed=0)
+        #rc.drive_motor(motor=2, speed=0)
         print("Turning off")
 
     @staticmethod
@@ -117,6 +140,10 @@ def move():
 
 
 if __name__ == '__main__':
+    # add cntl-c handler
+    # Tell Python to run the handler() function when SIGINT is recieved
+    signal(SIGINT, handler)
+
     from argparse import ArgumentParser
 
     parser = ArgumentParser()
@@ -124,4 +151,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     port = args.port
 
-    app.run(host='192.168.0.142', port=port)
+    app.run(host='192.168.0.130', port=port)
